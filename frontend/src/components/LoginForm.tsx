@@ -23,6 +23,9 @@ const LoginForm = () => {
           setError('Login failed: Invalid credentials')
           return
         }
+
+        const data = await response.json()
+        localStorage.setItem('token', data.token)
         window.location.href = '/dashboard'
       } catch (err) {
         console.error(err)

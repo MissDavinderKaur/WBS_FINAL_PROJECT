@@ -1,8 +1,12 @@
 import express from 'express'
 import cors from 'cors'
+import path from 'path'
+import dotenv from 'dotenv'
 import 'dotenv/config'
 import mongoose from 'mongoose'
 import userRoutes from "./routes/user";
+
+dotenv.config({ path: path.resolve(__dirname, '../../.env') })
 
 const app = express()
 const port = process.env.PORT;

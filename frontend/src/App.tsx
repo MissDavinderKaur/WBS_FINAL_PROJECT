@@ -21,6 +21,7 @@ const App: React.FC = () => (
   <Routes>
     <Route path="/" element={<Home />} />
     <Route path="/login" element={<LoginForm />} />
+    <Route path="/dashboard" element={<div className="min-h-screen flex items-center justify-center text-slate-100">Dashboard</div>} />
   </Routes>
 )
 

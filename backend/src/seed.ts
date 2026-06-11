@@ -1,6 +1,9 @@
-import 'dotenv/config'
+import path from 'path'
+import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import UserModel, { UserValidationSchema } from './models/user'
+
+dotenv.config({ path: path.resolve(__dirname, '../../.env') })
 
 const uri = process.env.MONGODB_URI
 if (!uri) throw new Error('MONGODB_URI is required')

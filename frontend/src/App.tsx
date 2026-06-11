@@ -1,12 +1,27 @@
-const App = () => (
-  <main className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-8">
-    <div className="max-w-2xl rounded-3xl bg-slate-900/80 p-10 shadow-2xl ring-1 ring-white/10">
-      <h1 className="text-4xl font-semibold text-white mb-4">Vite + React + Tailwind</h1>
-      <p className="text-slate-300 leading-7">
-        Hello World
-      </p>
-    </div>
-  </main>
+import React from 'react'
+import { Routes, Route, useNavigate } from 'react-router-dom'
+import LoginForm from './components/LoginForm'
+
+const Home = () => {
+  const navigate = useNavigate()
+
+  return (
+    <main className="min-h-screen flex items-center justify-center p-8">
+      <div className="max-w-2xl rounded-3xl card p-10 shadow-2xl ring-1 ring-white/10">
+        <h1 className="text-4xl font-semibold text-slate-100 mb-4 text-center">Capital.</h1>
+        <button className="btn-primary" onClick={() => navigate('/login')}>
+          Let's get started!
+        </button>
+      </div>
+    </main>
+  )
+}
+
+const App: React.FC = () => (
+  <Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="/login" element={<LoginForm />} />
+  </Routes>
 )
 
 export default App

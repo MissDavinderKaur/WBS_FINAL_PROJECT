@@ -20,7 +20,8 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    jwt.verify(token, secret)
+    const payload = jwt.verify(token, secret) as any
+    ;(req as any).user = payload
     return next()
   } catch (error) {
     return res.status(401).json({ error: 'Authorization token invalid' })

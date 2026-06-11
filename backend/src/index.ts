@@ -2,6 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import 'dotenv/config'
 import mongoose from 'mongoose'
+import userRoutes from "./routes/user";
 
 const app = express()
 const port = process.env.PORT;
@@ -10,6 +11,7 @@ if (!uri) throw new Error('MONGODB_URI is required')
 
 app.use(cors())
 app.use(express.json())
+app.use('/api/users', userRoutes)
 
 mongoose.connect(uri)
   .then(() => {
@@ -19,7 +21,7 @@ mongoose.connect(uri)
     console.error('MongoDB connection error:', error)
     process.exit(1)
   })
-  
+
 app.listen(port, () => {
   console.log(`Backend listening on http://localhost:${port}`)
 })

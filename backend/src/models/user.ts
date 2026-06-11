@@ -1,13 +1,6 @@
 import { z } from 'zod'
 import mongoose from 'mongoose'
 
-export const UserValidationSchema = z.object({
-  email: z.string(),
-  password: z.string().min(6)
-})
-
-export type UserInput = z.infer<typeof UserValidationSchema>
-
 export type UserDocument = mongoose.Document & {
     id: string
     email: string
@@ -28,6 +21,11 @@ const userSchema = new mongoose.Schema<UserDocument>(
 
 userSchema.virtual('id').get(function () {
   return this._id.toHexString()
+})
+
+export const UserValidationSchema = z.object({
+  email: z.string(),
+  password: z.string().min(6)
 })
 
 const UserModel = mongoose.model<UserDocument>('User', userSchema)

@@ -24,3 +24,19 @@ This repository is scaffolded as a monorepo with:
 
 - Dev server: `http://localhost:3000`
 
+
+## Application Description
+
+An interactive financail planning application, designed to bridge the gap between daily household wealth management and long-term forecasting.
+
+
+### Feature Checklist
+
+* User login and authentication
+* Income Management(base salaries, freelance retainer channels, side-hustles)
+* Expense Tracking (fixed, variable) 
+* Mortgage management
+* Pension calculator
+
+
+

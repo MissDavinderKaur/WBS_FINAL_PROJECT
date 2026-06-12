@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 type IncomeItem = {
   id: string
-  label: string
+  description: string
   amount: number
   frequency: 'Monthly' | 'Yearly' | 'Weekly'
 }
@@ -27,7 +27,7 @@ const Income: React.FC = () => {
   const navigate = useNavigate()
   const [incomeItems, setIncomeItems] = useState<IncomeItem[]>([])
   const [loading, setLoading] = useState(true)
-  const [newItem, setNewItem] = useState({ label: '', amount: '', frequency: 'Monthly' })
+  const [newItem, setNewItem] = useState({ description: '', amount: '', frequency: 'Monthly' })
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
   const payload: any = parseJwt(token)
@@ -58,10 +58,10 @@ const Income: React.FC = () => {
 
   const handleAdd = async () => {
     try {
-      const body = { label: newItem.label, amount: Number(newItem.amount), frequency: newItem.frequency }
+      const body = { description: newItem.description, amount: Number(newItem.amount), frequency: newItem.frequency }
       const res = await fetch(`${INCOME_API}/`, { method: 'POST', headers: authHeaders(), body: JSON.stringify(body) })
       if (!res.ok) throw new Error('create failed')
-      setNewItem({ label: '', amount: '', frequency: 'Monthly' })
+      setNewItem({ description: '', amount: '', frequency: 'Monthly' })
       await fetchIncomeItems()
     } catch (err) {
       console.error(err)
@@ -70,7 +70,7 @@ const Income: React.FC = () => {
 
   const handleUpdate = async (id: string, item: IncomeItem) => {
     try {
-      const body = { label: item.label, amount: Number(item.amount), frequency: item.frequency }
+      const body = { description: item.description, amount: Number(item.amount), frequency: item.frequency }
       const res = await fetch(`${INCOME_API}/${id}`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify(body) })
       if (!res.ok) throw new Error('update failed')
       await fetchIncomeItems()
@@ -106,15 +106,15 @@ const Income: React.FC = () => {
                 <div className="grid gap-4 md:grid-cols-[1fr_180px] items-end">
                   <div className="grid gap-3 md:grid-cols-3">
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm text-slate-300">Label</label>
+                      <label className="text-sm text-slate-300">Description</label>
                       <input
                         className="w-full p-2 rounded bg-slate-700 text-slate-100"
-                        value={it ? it.label : newItem.label}
+                        value={it ? it.description : newItem.description}
                         onChange={(e) => {
                           if (it) {
-                            setIncomeItems((s) => s.map(i => i.id === it.id ? { ...i, label: e.target.value } : i))
+                            setIncomeItems((s) => s.map(i => i.id === it.id ? { ...i, description: e.target.value } : i))
                           } else {
-                            setNewItem(n => ({ ...n, label: e.target.value }))
+                            setNewItem(n => ({ ...n, description: e.target.value }))
                           }
                         }}
                       />

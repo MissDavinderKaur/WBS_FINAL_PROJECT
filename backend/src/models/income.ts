@@ -3,7 +3,7 @@ import mongoose from 'mongoose'
 
 export type IncomeDocument = mongoose.Document & {
   userId: string
-  label: string
+  description: string
   amount: number
   frequency: 'Monthly' | 'Yearly' | 'Weekly'
   id: string
@@ -12,7 +12,7 @@ export type IncomeDocument = mongoose.Document & {
 const incomeSchema = new mongoose.Schema<IncomeDocument>(
   {
     userId: { type: String, required: true, index: true },
-    label: { type: String, required: true, trim: true },
+    description: { type: String, required: true, trim: true },
     amount: { type: Number, required: true },
     frequency: { type: String, required: true }
   },
@@ -24,7 +24,7 @@ incomeSchema.virtual('id').get(function () {
 })
 
 export const IncomeValidationSchema = z.object({
-  label: z.string().min(1),
+  description: z.string().min(1),
   amount: z.number(),
   frequency: z.enum(['Monthly', 'Yearly', 'Weekly'])
 })

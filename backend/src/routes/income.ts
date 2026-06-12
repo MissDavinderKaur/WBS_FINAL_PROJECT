@@ -38,7 +38,7 @@ router.put('/:incomeId', async (req, res) => {
     if (existing.userId !== user!.id) return res.status(403).json({ error: 'Forbidden' })
 
     const payload = IncomeValidationSchema.parse(req.body)
-    existing.label = payload.label
+    existing.description = payload.description
     existing.amount = payload.amount
     existing.frequency = payload.frequency
     await existing.save()

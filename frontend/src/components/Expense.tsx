@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 type ExpenseItem = {
   id: string
-  label: string
+  description: string
   amount: number
   type: 'Fixed' | 'Variable'
   category: 'Housing' | 'Shopping' | 'Transport' | 'Entertainment' | 'Utilties' | 'Other'
@@ -29,7 +29,7 @@ const Expense: React.FC = () => {
   const [expenseItems, setExpenseItems] = useState<ExpenseItem[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [newItem, setNewItem] = useState({ label: '', amount: '', type: 'Fixed' as const, category: 'Housing' as const })
+  const [newItem, setNewItem] = useState({ description: '', amount: '', type: 'Fixed' as const, category: 'Housing' as const })
 
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
   const payload: any = parseJwt(token)
@@ -60,12 +60,12 @@ const Expense: React.FC = () => {
 
   const handleAdd = async () => {
     setError(null)
-    if (!newItem.label.trim() || !newItem.amount.trim()) {
-      setError('Label and amount are required')
+    if (!newItem.description.trim() || !newItem.amount.trim()) {
+      setError('Description and amount are required')
       return
     }
 
-    const body = { label: newItem.label.trim(), amount: Number(newItem.amount), type: newItem.type, category: newItem.category }
+    const body = { description: newItem.description.trim(), amount: Number(newItem.amount), type: newItem.type, category: newItem.category }
     if (Number.isNaN(body.amount)) {
       setError('Amount must be a number')
       return
@@ -77,7 +77,7 @@ const Expense: React.FC = () => {
         const errBody = await res.json().catch(() => null)
         throw new Error(errBody?.error || 'Create failed')
       }
-      setNewItem({ label: '', amount: '', type: 'Fixed', category: 'Housing' })
+      setNewItem({ description: '', amount: '', type: 'Fixed', category: 'Housing' })
       await fetchExpenseItems()
     } catch (err: any) {
       console.error(err)
@@ -87,7 +87,7 @@ const Expense: React.FC = () => {
 
   const handleUpdate = async (id: string, item: ExpenseItem) => {
     try {
-      const body = { label: item.label, amount: Number(item.amount), type: item.type, category: item.category }
+      const body = { description: item.description, amount: Number(item.amount), type: item.type, category: item.category }
       const res = await fetch(`${EXPENSE_API}/${id}`, { method: 'PUT', headers: authHeaders(), body: JSON.stringify(body) })
       if (!res.ok) throw new Error('update failed')
       await fetchExpenseItems()
@@ -124,15 +124,15 @@ const Expense: React.FC = () => {
                 <div className="grid gap-4 md:grid-cols-[1fr_180px] items-end">
                   <div className="grid gap-3 md:grid-cols-4">
                     <div className="flex flex-col gap-1">
-                      <label className="text-sm text-slate-300">Label</label>
+                      <label className="text-sm text-slate-300">Description</label>
                       <input
                         className="w-full p-2 rounded bg-slate-700 text-slate-100"
-                        value={it ? it.label : newItem.label}
+                        value={it ? it.description : newItem.description}
                         onChange={(e) => {
                           if (it) {
-                            setExpenseItems((s) => s.map(i => i.id === it.id ? { ...i, label: e.target.value } : i))
+                            setExpenseItems((s) => s.map(i => i.id === it.id ? { ...i, description: e.target.value } : i))
                           } else {
-                            setNewItem(n => ({ ...n, label: e.target.value }))
+                            setNewItem(n => ({ ...n, description: e.target.value }))
                           }
                         }}
                       />

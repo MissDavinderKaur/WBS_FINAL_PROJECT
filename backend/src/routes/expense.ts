@@ -38,7 +38,7 @@ router.put('/:expenseId', async (req, res) => {
     if (existing.userId !== user!.id) return res.status(403).json({ error: 'Forbidden' })
 
     const payload = ExpenseValidationSchema.parse(req.body)
-    existing.label = payload.label
+    existing.description = payload.description
     existing.amount = payload.amount
     existing.type = payload.type
     existing.category = payload.category

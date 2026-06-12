@@ -3,90 +3,65 @@ import ExpenseModel, { ExpenseValidationSchema } from '../models/expense'
 
 const router = Router()
 
+// Create expense (protected)
 router.post('/', async (req, res) => {
   try {
-    const userId = req.user?.id
-    if (!userId) {
-      return res.status(401).json({ message: 'Unauthorized' })
-    }
-
-    const parseResult = ExpenseValidationSchema.safeParse(req.body)
-    if (!parseResult.success) {
-      return res.status(400).json({ message: 'Invalid expense data', errors: parseResult.error.issues })
-    }
-
-    const expense = await ExpenseModel.create({
-      ...parseResult.data,
-      userId
-    })
-
+    const user = req.user
+    const parsedExpense = ExpenseValidationSchema.safeParse(req.body)
+    const expense = await ExpenseModel.create({...parsedExpense, userId:user!.id })
     return res.status(201).json(expense)
-  } catch (error) {
-    console.error(error)
-    return res.status(500).json({ message: 'Failed to create expense' })
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message })
   }
 })
 
+// Read expenses for a user (protected)
 router.get('/:userId', async (req, res) => {
   try {
-    const userId = req.user?.id
-    if (!userId || userId !== req.params.userId) {
-      return res.status(401).json({ message: 'Unauthorized' })
-    }
-
-    const expenses = await ExpenseModel.find({ userId }).lean()
-    return res.status(200).json(expenses)
-  } catch (error) {
-    console.error(error)
-    return res.status(500).json({ message: 'Failed to fetch expenses' })
+    const user = req.user
+    const { userId } = req.params
+    if (user?.id !== userId) return res.status(403).json({ error: 'Forbidden' })
+    const expenseItems = await ExpenseModel.find({ userId }).exec()
+    return res.status(200).json(expenseItems)
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message })
   }
 })
 
+// Update expense (protected)
 router.put('/:expenseId', async (req, res) => {
   try {
-    const userId = req.user?.id
-    if (!userId) {
-      return res.status(401).json({ message: 'Unauthorized' })
-    }
+    const user = req.user
+    const { expenseId } = req.params
+    const existing = await ExpenseModel.findById(expenseId).exec()
+    if (!existing) return res.status(404).json({ error: 'Not found' })
+    if (existing.userId !== user!.id) return res.status(403).json({ error: 'Forbidden' })
 
-    const parseResult = ExpenseValidationSchema.safeParse(req.body)
-    if (!parseResult.success) {
-      return res.status(400).json({ message: 'Invalid expense data', errors: parseResult.error.issues })
-    }
-
-    const expense = await ExpenseModel.findOneAndUpdate(
-      { _id: req.params.expenseId, userId },
-      parseResult.data,
-      { new: true }
-    )
-
-    if (!expense) {
-      return res.status(404).json({ message: 'Expense not found or not owned by user' })
-    }
-
-    return res.status(200).json(expense)
-  } catch (error) {
-    console.error(error)
-    return res.status(500).json({ message: 'Failed to update expense' })
+    const payload = ExpenseValidationSchema.parse(req.body)
+    existing.label = payload.label
+    existing.amount = payload.amount
+    existing.type = payload.type
+    existing.category = payload.category
+    await existing.save()
+    return res.json(existing)
+  } catch (err: any) {
+    return res.status(400).json({ error: err.message })
   }
 })
 
+// Delete expense (protected)
 router.delete('/:expenseId', async (req, res) => {
   try {
-    const userId = req.user?.id
-    if (!userId) {
-      return res.status(401).json({ message: 'Unauthorized' })
-    }
+    const user = req.user
+    const { expenseId } = req.params
+    const existing = await ExpenseModel.findById(expenseId).exec()
+    if (!existing) return res.status(404).json({ error: 'Not found' })
+    if (existing.userId !== user!.id) return res.status(403).json({ error: 'Forbidden' })
 
-    const expense = await ExpenseModel.findOneAndDelete({ _id: req.params.expenseId, userId })
-    if (!expense) {
-      return res.status(404).json({ message: 'Expense not found or not owned by user' })
-    }
-
-    return res.status(200).json({ message: 'Expense deleted' })
-  } catch (error) {
-    console.error(error)
-    return res.status(500).json({ message: 'Failed to delete expense' })
+    await existing.deleteOne()
+    return res.json({ success: true })
+  } catch (err: any) {
+    return res.status(500).json({ error: err.message })
   }
 })
 

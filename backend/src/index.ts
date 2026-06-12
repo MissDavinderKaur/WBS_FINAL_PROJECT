@@ -18,10 +18,9 @@ if (!uri) throw new Error('MONGODB_URI is required')
 
 app.use(cors())
 app.use(express.json())
-app.use(authMiddleware)
 app.use('/api/users', userRoutes)
-app.use('/api/incomes', incomeRoutes)
-app.use('/api/expenses', expenseRoutes)
+app.use('/api/incomes', authMiddleware, incomeRoutes)
+app.use('/api/expenses', authMiddleware, expenseRoutes)
 
 mongoose.connect(uri)
   .then(() => {

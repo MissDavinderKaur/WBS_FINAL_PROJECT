@@ -1,10 +1,14 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import LogoutButton from './LogoutButton'
 
 const Dashboard = () => {
   const navigate = useNavigate()
   return (
     <main className="min-h-screen flex flex-col items-center justify-start p-8">
+      <div className="w-full max-w-5xl flex justify-end mb-4">
+        <LogoutButton />
+      </div>
       <h1 className="text-4xl font-semibold text-slate-100 mb-8 text-center">Capital.</h1>
 
       <div className="w-full max-w-5xl mx-auto">

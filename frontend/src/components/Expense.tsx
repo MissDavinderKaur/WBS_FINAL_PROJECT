@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import LogoutButton from './LogoutButton'
 
 type ExpenseItem = {
   id: string
@@ -110,8 +111,9 @@ const Expense: React.FC = () => {
     <main className="min-h-screen p-8">
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-2xl text-slate-100">Your Expenses</h2>
           <button className="btn-primary" onClick={() => navigate('/dashboard')}>Back</button>
+          <h2 className="text-2xl text-slate-100">Your Expenses</h2>
+          <LogoutButton />
         </div>
 
         {loading ? (

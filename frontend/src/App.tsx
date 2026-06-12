@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
 import Dashboard from './components/Dashboard'
 import Income from './components/Income'
+import Expense from './components/Expense'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -25,6 +26,7 @@ const App: React.FC = () => (
     <Route path="/login" element={<LoginForm />} />
     <Route path="/dashboard" element={<Dashboard />} />
     <Route path="/dashboard/income" element={<Income />} />
+    <Route path="/dashboard/expenses" element={<Expense />} />
   </Routes>
 )
 

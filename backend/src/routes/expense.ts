@@ -7,7 +7,7 @@ const router = Router()
 router.post('/', async (req, res) => {
   try {
     const user = req.user
-    const parsedExpense = ExpenseValidationSchema.safeParse(req.body)
+    const parsedExpense = ExpenseValidationSchema.parse(req.body)
     const expense = await ExpenseModel.create({...parsedExpense, userId:user!.id })
     return res.status(201).json(expense)
   } catch (err: any) {

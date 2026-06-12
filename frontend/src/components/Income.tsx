@@ -101,9 +101,9 @@ const Income: React.FC = () => {
           <div className="text-slate-300">Loading...</div>
         ) : (
           <div className="space-y-3">
-            {(incomeItems.length ? incomeItems : [null]).map((it, idx) => (
+            {[...incomeItems, null].map((it, idx) => (
               <div key={it?.id ?? `new-${idx}`} className="w-full bg-slate-800 p-4 rounded">
-                <div className="grid gap-4 md:grid-cols-[1fr_auto] items-end">
+                <div className="grid gap-4 md:grid-cols-[1fr_180px] items-end">
                   <div className="grid gap-3 md:grid-cols-3">
                     <div className="flex flex-col gap-1">
                       <label className="text-sm text-slate-300">Label</label>
@@ -151,14 +151,14 @@ const Income: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-2 justify-end">
+                  <div className="flex gap-2 w-full">
                     {it ? (
                       <>
-                        <button className="btn-primary" onClick={() => handleUpdate(it.id, it)}>Update</button>
-                        <button className="btn-danger" onClick={() => handleDelete(it.id)}>Delete</button>
+                        <button className="btn-primary flex-1" onClick={() => handleUpdate(it.id, it)}>Update</button>
+                        <button className="btn-delete flex-1" onClick={() => handleDelete(it.id)}>Delete</button>
                       </>
                     ) : (
-                      <button className="btn-primary w-full md:w-auto" onClick={handleAdd}>Add</button>
+                      <button className="btn-primary w-full" onClick={handleAdd}>Add</button>
                     )}
                   </div>
                 </div>

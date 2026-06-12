@@ -22,6 +22,10 @@
 	.btn-disabled {
 		@apply bg-slate-800 text-slate-500 px-4 py-2 rounded cursor-not-allowed;
 	}
+
+	.btn-delete {
+		@apply bg-rose-400 hover:bg-rose-500 text-white px-4 py-2 rounded;
+	}
 }
 
 html {

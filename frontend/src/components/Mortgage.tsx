@@ -8,6 +8,7 @@ type MortgageItem = {
   annualInterestRate: number
   mortgageStartDate: string
   standardMonthlyRepayment: number
+  remainingBalance: number
 }
 
 const MORTGAGE_API = 'http://localhost:3000/api/mortgages'
@@ -207,7 +208,15 @@ const Mortgage: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex gap-2 w-full">
+                  <div className="flex flex-col gap-2 w-full">
+                    {it && (
+                      <div className="text-center">
+                        <p className="text-xs text-slate-400 mb-1">Remaining Balance</p>
+                        <p className="text-xl font-bold text-slate-100">
+                          £{it.remainingBalance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                        </p>
+                      </div>
+                    )}
                     {it ? (
                       <>
                         <button className="btn-primary flex-1" onClick={() => handleUpdate(it.id, it)}>Update</button>

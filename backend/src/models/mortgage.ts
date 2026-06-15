@@ -7,6 +7,7 @@ export type MortgageDocument = mongoose.Document & {
   annualInterestRate: number
   mortgageStartDate: Date
   standardMonthlyRepayment: number
+  remainingBalance: number
   id: string
 }
 
@@ -23,6 +24,19 @@ const mortgageSchema = new mongoose.Schema<MortgageDocument>(
 
 mortgageSchema.virtual('id').get(function () {
   return this._id.toHexString()
+})
+
+mortgageSchema.virtual('remainingBalance').get(function () {
+  const r = this.annualInterestRate / 12
+  const now = new Date()
+  const start = new Date(this.mortgageStartDate)
+  const monthsPaid = (now.getFullYear() - start.getFullYear()) * 12 + (now.getMonth() - start.getMonth())
+
+  if (monthsPaid <= 0) return Math.round(this.originalLoanAmount * 100) / 100
+
+  const factor = Math.pow(1 + r, monthsPaid)
+  const balance = this.originalLoanAmount * factor - this.standardMonthlyRepayment * (factor - 1) / r
+  return Math.max(0, Math.round(balance * 100) / 100)
 })
 
 export const MortgageValidationSchema = z.object({

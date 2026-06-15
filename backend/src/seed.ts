@@ -5,6 +5,7 @@ import bcrypt from 'bcrypt'
 import UserModel, { UserValidationSchema } from './models/user'
 import IncomeModel from './models/income'
 import ExpenseModel from './models/expense'
+import MortgageModel from './models/mortgage'
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') })
 
@@ -19,6 +20,7 @@ async function runSeed() {
     await UserModel.deleteMany({})
     await IncomeModel.deleteMany({})
     await ExpenseModel.deleteMany({})
+    await MortgageModel.deleteMany({})
 
     const [user] = await UserModel.insertMany([hashed])
     const userId = user._id.toString()
@@ -38,7 +40,17 @@ async function runSeed() {
       { userId, description: 'Dining out', amount: 120, type: 'Variable', category: 'Entertainment' },
     ])
 
-    console.log('Seeded 1 user, 2 income entries, and 7 expense entries successfully.')
+    await MortgageModel.insertMany([
+      {
+        userId,
+        originalLoanAmount: 320000,
+        annualInterestRate: 0.042,
+        mortgageStartDate: new Date(2020, 2, 1),
+        standardMonthlyRepayment: 1742.86
+      }
+    ])
+
+    console.log('Seeded 1 user, 2 income entries, 7 expense entries, and 1 mortgage successfully.')
     process.exit(0)
   } catch (error) {
     console.error('Seeding failed:', error)

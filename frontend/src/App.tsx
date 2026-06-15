@@ -4,6 +4,7 @@ import LoginForm from './components/LoginForm'
 import Dashboard from './components/Dashboard'
 import Income from './components/Income'
 import Expense from './components/Expense'
+import Mortgage from './components/Mortgage'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -27,6 +28,7 @@ const App: React.FC = () => (
     <Route path="/dashboard" element={<Dashboard />} />
     <Route path="/dashboard/income" element={<Income />} />
     <Route path="/dashboard/expenses" element={<Expense />} />
+    <Route path="/dashboard/mortgage" element={<Mortgage />} />
   </Routes>
 )
 

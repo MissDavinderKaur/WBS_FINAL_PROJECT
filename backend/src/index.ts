@@ -7,6 +7,7 @@ import mongoose from 'mongoose'
 import userRoutes from './routes/user'
 import incomeRoutes from './routes/income'
 import expenseRoutes from './routes/expense'
+import mortgageRoutes from './routes/mortgage'
 import authMiddleware from './middleware/auth'
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') })
@@ -21,6 +22,7 @@ app.use(express.json())
 app.use('/api/users', userRoutes)
 app.use('/api/incomes', authMiddleware, incomeRoutes)
 app.use('/api/expenses', authMiddleware, expenseRoutes)
+app.use('/api/mortgages', authMiddleware, mortgageRoutes)
 
 mongoose.connect(uri)
   .then(() => {

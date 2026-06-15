@@ -36,6 +36,14 @@ function toDisplayDate(isoDate: string) {
 
 const emptyNew = { originalLoanAmount: '', annualInterestRate: '', mortgageStartDate: '', standardMonthlyRepayment: '' }
 
+function formatAmount(value: string | number): string {
+  const raw = String(value).replace(/,/g, '')
+  if (raw === '' || isNaN(Number(raw))) return raw
+  const [integer, decimal] = raw.split('.')
+  const formatted = Number(integer).toLocaleString('en-GB')
+  return decimal !== undefined ? `${formatted}.${decimal}` : formatted
+}
+
 function validateDate(value: string): string | null {
   if (!/^\d{2}-\d{2}-\d{4}$/.test(value)) return 'Use DD-MM-YYYY format'
   const [day, month, year] = value.split('-').map(Number)
@@ -151,9 +159,9 @@ const Mortgage: React.FC = () => {
                       <input
                         className="w-full p-2 rounded bg-slate-700 text-slate-100 text-right"
                         placeholder="e.g. 250000"
-                        value={it ? String(it.originalLoanAmount) : newItem.originalLoanAmount}
+                        value={formatAmount(it ? it.originalLoanAmount : newItem.originalLoanAmount)}
                         onChange={(e) => {
-                          const v = e.target.value
+                          const v = e.target.value.replace(/,/g, '')
                           if (it) setMortgageItems(s => s.map(m => m.id === it.id ? { ...m, originalLoanAmount: Number(v) } : m))
                           else setNewItem(n => ({ ...n, originalLoanAmount: v }))
                         }}
@@ -198,9 +206,9 @@ const Mortgage: React.FC = () => {
                       <input
                         className="w-full p-2 rounded bg-slate-700 text-slate-100 text-right"
                         placeholder="e.g. 1234.56"
-                        value={it ? String(it.standardMonthlyRepayment) : newItem.standardMonthlyRepayment}
+                        value={formatAmount(it ? it.standardMonthlyRepayment : newItem.standardMonthlyRepayment)}
                         onChange={(e) => {
-                          const v = e.target.value
+                          const v = e.target.value.replace(/,/g, '')
                           if (it) setMortgageItems(s => s.map(m => m.id === it.id ? { ...m, standardMonthlyRepayment: Number(v) } : m))
                           else setNewItem(n => ({ ...n, standardMonthlyRepayment: v }))
                         }}

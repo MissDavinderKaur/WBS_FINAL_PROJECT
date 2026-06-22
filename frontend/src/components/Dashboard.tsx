@@ -16,7 +16,7 @@ const Dashboard = () => {
           <button className="btn-primary py-6" onClick={() => navigate('/dashboard/income')}>Income</button>
           <button className="btn-primary py-6" onClick={() => navigate('/dashboard/expenses')}>Expenses</button>
           <button className="btn-primary py-6" onClick={() => navigate('/dashboard/mortgage')}>Mortgage</button>
-          <button className="btn-primary py-6">Pension</button>
+          <button className="btn-primary py-6" onClick={() => navigate('/dashboard/pension')}>Pension</button>
         </div>
       </div>
     </main>
